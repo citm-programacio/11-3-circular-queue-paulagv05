@@ -1,19 +1,120 @@
-// ConsoleApplication26.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
-//
-
 #include <iostream>
+using namespace std;
 
-int main()
-{
-    std::cout << "Hello World!\n";
+class CircularQueue {
+public:
+    CircularQueue(int capacity = 10) {
+        _capacity = capacity;
+        _array = new int[_capacity];
+        _front = -1;
+        _back = -1;
+        _size = 0;
+    }
+
+    ~CircularQueue() {
+        delete[] _array;
+    }
+
+    void enqueue(int value) {
+        // Check if the queue is full and resize it if necessary
+        if (_size == _capacity) {
+            resize();
+        }
+
+        if (_size == 0) {
+            _front = 0;
+            _back = 0;
+        }
+        else {
+            _back = (_back + 1) % _capacity;
+        }
+
+        _array[_back] = value;
+        _size++;
+    }
+
+    int dequeue() {
+        if (empty()) {
+            cout << "Queue is empty. Nothing to dequeue.\n";
+            return -1;  // Return an invalid value or handle error appropriately
+        }
+
+        int dequeuedValue = _array[_front];
+        if (_front == _back) {  // Only one element was in the queue
+            _front = -1;
+            _back = -1;
+        }
+        else {
+            _front = (_front + 1) % _capacity;
+        }
+
+        _size--;
+        return dequeuedValue;
+    }
+
+    int size() const {
+        return _size;
+    }
+
+    bool empty() const {
+        return _size == 0;
+    }
+
+    void print() const {
+        if (empty()) {
+            cout << "Queue is empty. Nothing to print.\n";
+            return;
+        }
+
+        std::cout << "Queue elements: ";
+        int index = _front;
+        for (int i = 0; i < _size; ++i) {
+            std::cout << _array[index] << " ";
+            index = (index + 1) % _capacity; 
+        }
+        std::cout << std::endl;
+    }
+
+private:
+    int _front;
+    int _back;
+    int* _array;
+    int _capacity;
+    int _size;
+
+    void resize() {
+        int newCapacity = _capacity * 2;
+        int* newArray = new int[newCapacity];
+
+        
+        int index = _front;
+        for (int i = 0; i < _size; ++i) {
+            newArray[i] = _array[index];
+            index = (index + 1) % _capacity; 
+        }
+
+        delete[] _array;
+        _array = newArray;
+        _capacity = newCapacity;
+        _front = 0;
+        _back = _size - 1;
+    }
+};
+
+int main() {
+    CircularQueue q(3);
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.print();
+
+    q.enqueue(40);  
+    q.print();
+
+    q.dequeue(); 
+    q.enqueue(50);
+    q.print();
+
+    return 0;
 }
-
-// Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
-// Depurar programa: F5 o menú Depurar > Iniciar depuración
-
-// Sugerencias para primeros pasos: 1. Use la ventana del Explorador de soluciones para agregar y administrar archivos
-//   2. Use la ventana de Team Explorer para conectar con el control de código fuente
-//   3. Use la ventana de salida para ver la salida de compilación y otros mensajes
-//   4. Use la ventana Lista de errores para ver los errores
-//   5. Vaya a Proyecto > Agregar nuevo elemento para crear nuevos archivos de código, o a Proyecto > Agregar elemento existente para agregar archivos de código existentes al proyecto
-//   6. En el futuro, para volver a abrir este proyecto, vaya a Archivo > Abrir > Proyecto y seleccione el archivo .sln
