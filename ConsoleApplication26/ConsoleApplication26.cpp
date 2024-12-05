@@ -3,7 +3,8 @@ using namespace std;
 
 class CircularQueue {
 public:
-    CircularQueue(int capacity = 10) {
+    CircularQueue(int capacity = 10) 
+    {
         _capacity = capacity;
         _array = new int[_capacity];
         _front = -1;
@@ -11,17 +12,20 @@ public:
         _size = 0;
     }
 
-    ~CircularQueue() {
+    ~CircularQueue() 
+    {
         delete[] _array;
     }
 
-    void enqueue(int value) {
-        // Check if the queue is full and resize it if necessary
-        if (_size == _capacity) {
+    void enqueue(int value) 
+    {
+        if (_size == _capacity) 
+        {
             resize();
         }
 
-        if (_size == 0) {
+        if (_size == 0) 
+        {
             _front = 0;
             _back = 0;
         }
@@ -33,18 +37,22 @@ public:
         _size++;
     }
 
-    int dequeue() {
-        if (empty()) {
+    int dequeue() 
+    {
+        if (empty()) 
+        {
             cout << "Queue is empty. Nothing to dequeue.\n";
-            return -1;  // Return an invalid value or handle error appropriately
+            return -1;  
         }
 
         int dequeuedValue = _array[_front];
-        if (_front == _back) {  // Only one element was in the queue
+        if (_front == _back) 
+        { 
             _front = -1;
             _back = -1;
         }
-        else {
+        else 
+        {
             _front = (_front + 1) % _capacity;
         }
 
@@ -52,23 +60,28 @@ public:
         return dequeuedValue;
     }
 
-    int size() const {
+    int size() const 
+    {
         return _size;
     }
 
-    bool empty() const {
+    bool empty() const 
+    {
         return _size == 0;
     }
 
-    void print() const {
-        if (empty()) {
+    void print() const 
+    {
+        if (empty()) 
+        {
             cout << "Queue is empty. Nothing to print.\n";
             return;
         }
 
         std::cout << "Queue elements: ";
         int index = _front;
-        for (int i = 0; i < _size; ++i) {
+        for (int i = 0; i < _size; ++i) 
+        {
             std::cout << _array[index] << " ";
             index = (index + 1) % _capacity; 
         }
@@ -82,13 +95,15 @@ private:
     int _capacity;
     int _size;
 
-    void resize() {
+    void resize() 
+    {
         int newCapacity = _capacity * 2;
         int* newArray = new int[newCapacity];
 
         
         int index = _front;
-        for (int i = 0; i < _size; ++i) {
+        for (int i = 0; i < _size; ++i) 
+        {
             newArray[i] = _array[index];
             index = (index + 1) % _capacity; 
         }
@@ -101,7 +116,8 @@ private:
     }
 };
 
-int main() {
+int main() 
+{
     CircularQueue q(3);
 
     q.enqueue(10);
